@@ -3,6 +3,9 @@ name: Scheduled Workflow
 on:
   schedule:
     - cron: "0/5 * * * *"
+  #push:
+   # branches:
+   #   - develop
 
 jobs:
    k6_load_test:
@@ -15,4 +18,4 @@ jobs:
      - name: Run local k6 test
        uses: k6io/action@v0.1
        with:
-         filename: smsotploadtesting.js
+         filename: test.js
