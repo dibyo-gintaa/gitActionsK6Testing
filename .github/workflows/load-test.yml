@@ -1,9 +1,8 @@
 name: Scheduled Workflow
 
 on:
-  push:
-    branches:
-      - feature/gintaa-api-test
+  schedule:
+    -cron: "0/59 * * * *"
 
 jobs:
    k6_load_test:
