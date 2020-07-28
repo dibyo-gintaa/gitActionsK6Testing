@@ -1,14 +1,25 @@
-# .github/workflows/load-test.yml
+name: Scheduled Workflow
 
-k6_load_test:
-  name: k6 Load Test
-  runs-on: ubuntu-latest
+on:
+  push:
+    branches:
+      - feature/gintaa-api-test
 
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+jobs:
+   k6_load_test:
+     name: k6 Load Test
+     runs-on: ubuntu-latest
+     steps:
+     - name: Checkout
+       uses: actions/checkout@v1
 
-    - name: Run local k6 test
-      uses: k6io/action@v0.1
-      with:
-        filename: test.js
+     - name: Run local k6 test
+       uses: k6io/action@v0.1
+       with:
+         filename: smsotploadtesting.js
+
+     - name: Send a Slack Notification
+       uses: docker://technosophos/slack-notify
+       env:
+         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+         SLACK_MESSAGE: "GitACtions workbook Scheduler testing"
