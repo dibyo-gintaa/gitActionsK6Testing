@@ -19,3 +19,9 @@ jobs:
        uses: k6io/action@v0.1
        with:
          filename: test.js
+
+     - name: Send a Slack Notification
+       uses: docker://technosophos/slack-notify
+       env:
+         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+         SLACK_MESSAGE: "GitACtions workbook Scheduler testing"
