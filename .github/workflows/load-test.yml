@@ -5,7 +5,7 @@ on:
     - cron: "0/5 * * * *"
   #push:
    # branches:
-   #  - develop
+   #   - develop
 
 jobs:
    k6_load_test:
@@ -14,14 +14,25 @@ jobs:
      steps:
      - name: Checkout
        uses: actions/checkout@v1
-
      - name: Run local k6 test
        uses: k6io/action@v0.1
        with:
-         filename: test.js
-
+         filename: test.js     
      - name: Send a Slack Notification
-       uses: docker://technosophos/slack-notify
+       uses: 8398a7/action-slack@v3
+       with:
+         channel: '#gintaa-github'
+         status: custom
+         fields: repo,message,commit,author,action,eventName,ref,workflow # selectable (default: repo,message)
+         custom_payload: |
+          {
+             username: 'action-slack',
+             icon_emoji: ':octocat:',
+             attachments: [{
+               color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+               text: 'Microservices successfully published in GCR',
+             }]
+            }
        env:
-         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-         SLACK_MESSAGE: "GitACtions workbook Scheduler testing"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
